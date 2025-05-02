@@ -35,6 +35,7 @@ public class BankAccountRegistrationApplication {
 				account = (Account) context.getBean("savingAccount");
 			} else {
 				System.out.println("Invalid selection! Exiting...");
+				context.close();
 				return;
 			}
 
@@ -75,6 +76,7 @@ public class BankAccountRegistrationApplication {
 					for(Account acc : accountList){
 						System.out.println(acc.getAccountType() + " : opening balance - " + acc.getBalance() + " Reference Id " + acc);
 					}
+					context.close();
 					return;
 				}
 			}
