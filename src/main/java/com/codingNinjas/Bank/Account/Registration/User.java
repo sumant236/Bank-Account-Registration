@@ -15,4 +15,6 @@ public interface User {
 
     /** This method returns the name attribute. **/
     String getName();
+
+//    void setAccountType(String currentAccount);
 }

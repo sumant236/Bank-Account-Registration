@@ -1,8 +1,8 @@
 package com.codingNinjas.Bank.Account.Registration;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
+import org.springframework.context.ApplicationContext;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,13 +11,14 @@ public class BankAccountRegistrationApplication {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("ApplicationContext.xml");
+//		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("com.codingNinjas.Bank.Account.Registration");
+		ApplicationContext context = SpringApplication.run(BankAccountRegistrationApplication.class, args);
 
 		System.out.println("Welcome to Account Registration Application!");
 		System.out.println("Please enter Your name?");
 		String name = sc.nextLine();
 
-		User user = (User) context.getBean("myUser");
+		User user = context.getBean(User.class);
 		user.setUserDetails(name);
 
 		System.out.println("Do you want to add account");
@@ -28,16 +29,20 @@ public class BankAccountRegistrationApplication {
 			System.out.println("Please select the account type \n1. Current \n2. Savings");
 			userChoice = sc.nextInt();
 
-			Account account = null;
-			if(userChoice == 1){
-				account = (Account) context.getBean("currentAccount");
+			Account account;
+
+            if(userChoice == 1){
+//				user.setAccountType("currentAccount");
+				account = context.getBean("currentAccount", Account.class);
 			} else if(userChoice == 2){
-				account = (Account) context.getBean("savingAccount");
+//				user.setAccountType("savingsAccount");
+				account = context.getBean("savingsAccount", Account.class);
 			} else {
-				System.out.println("Invalid selection! Exiting...");
-				context.close();
+				System.out.println("Invalid selection!!");
 				return;
 			}
+
+//			Account account = ((myUser) user).accountType;
 
 			System.out.println("Enter the opening balance");
 			double amount = sc.nextDouble();
@@ -55,13 +60,17 @@ public class BankAccountRegistrationApplication {
 					userChoice = sc.nextInt();
 
 					if(userChoice == 1){
-						account = (Account) context.getBean("currentAccount");
+//				user.setAccountType("currentAccount");
+						account = context.getBean("currentAccount", Account.class);
 					} else if(userChoice == 2){
-						account = (Account) context.getBean("savingAccount");
+//				user.setAccountType("savingsAccount");
+						account = context.getBean("savingsAccount", Account.class);
 					} else {
-						System.out.println("Invalid selection! Exiting...");
+						System.out.println("Invalid selection!!");
 						return;
 					}
+
+//			Account account = ((myUser) user).accountType;
 
 					System.out.println("Enter the opening balance");
 					amount = sc.nextDouble();
@@ -74,9 +83,8 @@ public class BankAccountRegistrationApplication {
 
 					List<Account> accountList = user.getAllAccounts();
 					for(Account acc : accountList){
-						System.out.println(acc.getAccountType() + " : opening balance - " + acc.getBalance() + " Reference Id " + acc);
+						System.out.println(acc.getAccountType() + " : opening balance - " + acc.getBalance() + " Reference Id " + acc.toString().substring(57));
 					}
-					context.close();
 					return;
 				}
 			}
